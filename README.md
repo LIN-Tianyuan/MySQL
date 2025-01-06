@@ -211,3 +211,67 @@ grant all on lemon.* to 'tom'@'%';
 -- Revoke all permissions on lemon database for 'tom'@'%' user
 revoke all on lemon.* from 'tom'@'%';
 ```
+## 3. Function
+### 3.1 String function
+```sql
+select concat('Hello' , ' MySQL'); 
+
+select lower('Hello'); 
+
+select upper('Hello'); 
+
+-- left fill
+select lpad('01', 5, '-'); 
+
+select rpad('01', 5, '-'); 
+
+select trim(' Hello MySQL '); 
+
+select substring('Hello MySQL',1,5);
+```
+### 3.2 Numeric function
+```sql
+-- Upward rounding
+select ceil(1.1); 
+
+select floor(1.9); 
+
+select mod(7,4); 
+
+select rand(); 
+
+select round(2.344,2); 
+
+-- Generate a six-digit random CAPTCHA
+select lpad(round(rand()*1000000 , 0), 6, '0');
+```
+### 3.3 Date function
+```sql
+select curdate();
+
+select curtime(); 
+
+-- Current date and time
+select now();
+
+select YEAR(now()); 
+select MONTH(now()); 
+select DAY(now()); 
+
+-- Increase the specified time interval
+select date_add(now(), INTERVAL 70 YEAR); 
+
+-- Get the number of days between two dates
+select datediff('2021-10-01', '2021-12-01');
+```
+
+### 3.4 Process function
+```sql
+select if(false, 'Ok', 'Error');
+
+select ifnull('Ok','Default');
+
+select ifnull('','Default');
+
+select ifnull(null,'Default'); 
+```
