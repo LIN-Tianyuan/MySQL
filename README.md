@@ -183,7 +183,7 @@ select * from emp limit 10,10;
 select * from mysql.user;
 ```
 
-![result](./image/01.png)
+![result](./Image/01.png)
 
 Where Host represents the host that the current user is accessing, if it is localhost, it only means that it can only be accessed on the current local machine, and cannot be accessed remotely. User represents the username of the user accessing the database.
 
