@@ -275,3 +275,60 @@ select ifnull('','Default');
 
 select ifnull(null,'Default'); 
 ```
+
+## 4. Constraint
+ - NOT NULL
+ - UNIQUE
+ - PRIMARY KEY 
+ - DEFAULT
+ - CHECK
+ - FOREIGN KEY
+```sql
+CREATE TABLE tb_user(
+    id int AUTO_INCREMENT PRIMARY KEY,
+    name varchar(10) NOT NULL UNIQUE,
+    age int check (age > 0 && age <= 120),
+    status char(1) default,
+    gender char(1)
+);
+```
+```sql
+create table dept(
+    id int auto_increment comment 'ID' primary key,
+    name varchar(50) not null
+);
+
+create table emp(
+    id int auto_increment comment 'ID' primary key,
+    name varchar(50) not null,
+    age int,
+    job varchar(20),
+    salary int,
+    entrydate date,
+    managerid int,
+    dept_id int
+);
+```
+ - Add foreign key
+```sql
+alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references dept(id);
+```
+ - Delete foreign key
+```sql
+alter table emp drop foreign key fk_emp_dept_id;
+```
+
+ - Delete/update behavior
+   - CASCADE
+     - When deleting/updating a corresponding record in the parent table, first check if the record has a corresponding foreign key, and if so, also delete/update the record whose foreign key is in the child table.
+      ```sql
+      alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references 
+      dept(id) on update cascade on delete cascade ;
+      ```
+   - SET NULL
+     - When deleting a corresponding record in the parent table, first check whether the record has a corresponding foreign key, and if so, set the value of the foreign key in the child table to null (this requires that the foreign key be allowed to take null).
+      ```sql
+      alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references 
+      dept(id) on update cascade on delete cascade ;
+      ```
+   - NO ACTION/RESTRICT/SET DEFAULT
