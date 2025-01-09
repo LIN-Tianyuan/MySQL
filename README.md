@@ -332,3 +332,73 @@ alter table emp drop foreign key fk_emp_dept_id;
       dept(id) on update cascade on delete cascade ;
       ```
    - NO ACTION/RESTRICT/SET DEFAULT
+## 5. Multi-table query
+### 5.1 Multi-table relationship
+ - Many-to-one
+   - Create a foreign key on the side of many that points to the primary key on the side of one
+ - Many-to-many
+   - Create a third intermediate table with at least two foreign keys associated with the primary keys of the two parties
+ - One-to-one
+   - Add a foreign key to either side, associate it with the primary key of the other side, and set the foreign key to be UNIQUE
+### 5.2 Inner Join
+ - Implicit inner join
+```sql
+select emp.name , dept.name from emp , dept where emp.dept_id = dept.id ; 
+
+-- Alias each table to simplify SQL writing. 
+select e.name,d.name from emp e , dept d where e.dept_id = d.id; 
+```
+ - Explicit inner join
+```sql
+select e.name, d.name from emp e inner join dept d on e.dept_id = d.id; 
+
+-- Alias each table to simplify SQL writing.  
+select e.name, d.name from emp e join dept d on e.dept_id = d.id; 
+```
+### 5.3 Outer join
+ - left outer join
+```sql
+select e.*, d.name from emp e left outer join dept d on e.dept_id = d.id;
+
+select e.*, d.name from emp e left join dept d on e.dept_id = d.id;
+```
+ - right outer join
+```sql
+select d.*, e.* from emp e right outer join dept d on e.dept_id = d.id;
+
+select d.*, e.* from dept d left outer join emp e on e.dept_id = d.id;
+```
+### 5.4 Self join
+```sql
+select a.name , b.name from emp a , emp b where a.managerid = b.id;
+```
+### 5.5 Syndicated query
+```sql
+select * from emp where salary < 5000
+union all
+select * from emp where age > 50;
+```
+### 5.6 Subquery
+ - Scalar subqueries (subqueries result in a single value)
+```sql
+-- Find out all the information about the employees of "Sales Department".
+select * from emp where dept_id = (select id from dept where name = 'sales'); 
+```
+ - Column subqueries (subquery results in a column)
+```sql
+-- Find out about all employees in the "Sales" and "Marketing" departments.
+select * from emp where dept_id in (select id from dept where name = 'sales' or
+name = 'marketing');
+```
+ - Row subqueries (subquery result is one row)
+```sql
+-- Find out about employees with the same salary and direct reports as "tom"
+select * from emp where (salary,managerid) = (select salary, managerid from emp
+where name = 'tom');
+```
+ - Table subqueries (subquery results in multiple rows and columns)
+```sql
+Search for employees with the same job title and salary as "tom" , "jerry"
+select * from emp where (job,salary) in ( select job, salary from emp where name =
+'tom' or name = 'jerry' );
+```
